@@ -24,45 +24,47 @@ class Anatomy extends Component {
     super()
     this.addMarker = this.addMarker.bind(this)
     this.showModal = this.showModal.bind(this)
+    this.updateRemainder = this.updateRemainder.bind(this)
     this.state = {
-      region: {
-        latitude: 40.704926,
-        longitude: -74.009432,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
       markers: [],
       isModalVisible: false,
-      currentLonLat: []
+      currentLonLat: [],
+      remainder: ''
     }
   }
 
   showModal(event) {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
-      currentLonLat: event.nativeEvent.coordinate || this.state.currentLonLat
+      currentLonLat: event.nativeEvent.coordinate
     })
   }
 
   addMarker(event) {
-    event = event.nativeEvent.coordinate
+    this.setState({isModalVisible: !this.state.isModalVisible} )
+    event = this.state.currentLonLat
     const newMarker = {
       id: this.state.markers.length,
-      title: "myMarker",
-      description: "my description",
+      title: this.state.remainder,
       coordinates: {
         latitude: event.latitude,
         longitude: event.longitude
       }
     }
-    this.setState({markers: [...this.state.markers, newMarker]})
+    this.setState({
+      markers: [...this.state.markers, newMarker],
+      currentLonLat: [],
+      remainder: ''
+    })
+  }
+
+  updateRemainder(update) {
+    this.setState({remainder: update})
   }
 
   render() {
-    const region = this.state.region
     const markers = this.state.markers
     const isModalVisible = this.state.isModalVisible
-    console.log('here is my state ', this.state)
     return (
       <Container style={styles.container}>
         <Header>
@@ -89,13 +91,12 @@ class Anatomy extends Component {
             <MapView.Marker
             key={marker.id}
             coordinate={marker.coordinates}
-            title={marker.title}
-            description={marker.description} />
+            title={marker.title} />
           ))
          }
 
             <View>
-              <FormModal isModalVisible={this.state.isModalVisible} showModal={this.showModal}/>
+              <FormModal isModalVisible={this.state.isModalVisible} addMarker={this.addMarker} updateRemainder={this.updateRemainder}/>
             </View>
 
          </MapView>
@@ -106,3 +107,10 @@ class Anatomy extends Component {
 }
 
 export default Anatomy;
+
+const region = {
+  latitude: 40.704926,
+  longitude: -74.009432,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421
+}

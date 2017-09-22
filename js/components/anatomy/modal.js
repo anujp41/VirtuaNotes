@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import styles from "./styles";
 
@@ -12,7 +12,7 @@ export default class FormModal extends Component {
     }
 
     _renderButton = (text) => (
-        <TouchableOpacity onPress={this.props.showModal}>
+        <TouchableOpacity onPress={this.props.addMarker}>
           <View style={styles.button}>
             <Text>Submit</Text>
           </View>
@@ -21,20 +21,19 @@ export default class FormModal extends Component {
     
     _renderModalContent = () => (
         <View style={styles.modalContent}>
-          <Text>Hello!</Text>
+          <TextInput style={styles.input} placeholder='Enter here' onChangeText={updatedText => this.props.updateRemainder(updatedText)} />
           {this._renderButton('Submit') }
         </View>
       );
 
     render() {
-        console.log('check the props ', this.props)
         const isModalVisible = this.props.isModalVisible
         return (
             <View>
             <Modal
                 isVisible={isModalVisible}
-                backdropColor={'#52B3D9'}
-                backdropOpacity={0.75}
+                backdropColor={'#336E7B'}
+                backdropOpacity={0.9}
                 animationIn={'zoomInDown'}
                 animationOut={'zoomOutUp'}
                 animationInTiming={1000}
