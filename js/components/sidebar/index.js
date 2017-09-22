@@ -24,6 +24,8 @@ const drawerCover = require("../../../img/drawer-cover.png");
 
 const drawerImage = require("../../../img/logo-kitchen-sink.png");
 
+const companyLogo = require("../../../img/myCompany2.png");
+
 const datas = [
 	{
 		name: "Anatomy",
@@ -198,7 +200,7 @@ class SideBar extends Component {
 			<Container>
 				<Content bounces={false} style={{ flex: 1, backgroundColor: "#fff", top: -1 }}>
 					<Image source={drawerCover} style={styles.drawerCover}>
-						<Image square style={styles.drawerImage} source={drawerImage} />
+						<Image square style={styles.drawerImage} source={companyLogo} />
 					</Image>
 					<List
 						dataArray={datas}

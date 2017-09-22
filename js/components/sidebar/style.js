@@ -16,17 +16,17 @@ export default {
     height: deviceHeight / 3.5,
     width: null,
     position: "relative",
-    marginBottom: 10
+    // marginBottom: 10
   },
   drawerImage: {
     position: "absolute",
     // left: (Platform.OS === 'android') ? 30 : 40,
-    left: Platform.OS === "android" ? deviceWidth / 10 : deviceWidth / 9,
+    left: deviceWidth / 14,
     // top: (Platform.OS === 'android') ? 45 : 55,
-    top: Platform.OS === "android" ? deviceHeight / 13 : deviceHeight / 12,
-    width: 210,
-    height: 75,
-    resizeMode: "cover"
+    top: deviceHeight / 22,
+    width: 275,
+    height: 150,
+    // resizeMode: "cover"
   },
   listItemContainer: {
     flexDirection: "row",
