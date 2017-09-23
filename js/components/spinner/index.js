@@ -40,8 +40,6 @@ class NHSpinner extends Component {
         <Content>
           <Spinner />
           <Spinner color="red" />
-          <Spinner color="green" />
-          <Spinner color="blue" />
         </Content>
       </Container>
     );

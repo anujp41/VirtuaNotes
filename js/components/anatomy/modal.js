@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Label, Item, Input } from 'native-base';
 import Modal from 'react-native-modal';
 import styles from "./styles";
 
@@ -21,7 +22,9 @@ export default class FormModal extends Component {
     
     _renderModalContent = () => (
         <View style={styles.modalContent}>
-          <TextInput style={styles.input} placeholder='Enter here' onChangeText={updatedText => this.props.updateRemainder(updatedText)} />
+            <Item fixedlabel>
+                <Input style={styles.input} placeholder="Your next remainder" onChangeText={updatedText => this.props.updateRemainder(updatedText)} />
+            </Item>
           {this._renderButton('Submit') }
         </View>
       );

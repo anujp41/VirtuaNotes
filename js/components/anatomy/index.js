@@ -17,6 +17,9 @@ import {
 } from "native-base";
 import FormModal from './modal'
 import styles from "./styles";
+import NHSpinner from '../spinner'
+
+const marker = require("../../../img/blueDot.png")
 
 class Anatomy extends Component {
 
@@ -26,10 +29,12 @@ class Anatomy extends Component {
     this.showModal = this.showModal.bind(this)
     this.updateRemainder = this.updateRemainder.bind(this)
     this.state = {
-      markers: [],
+      currentLocation: {},  //move to store
+      markers: [],          //move to store
       isModalVisible: false,
       currentLonLat: [],
-      remainder: ''
+      remainder: '',
+      errorMessage: null
     }
   }
 
@@ -62,9 +67,32 @@ class Anatomy extends Component {
     this.setState({remainder: update})
   }
 
+  componentDidMount() {
+    this.watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        this.setState({
+          currentLocation: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          },
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 2000, maximumAge: 1000, distanceFilter: 0 },
+    );
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
+
   render() {
+    console.log('current state ', this.state)
     const markers = this.state.markers
     const isModalVisible = this.state.isModalVisible
+    const currentLocation = this.state.currentLocation
+    if (currentLocation.latitude) {
     return (
       <Container style={styles.container}>
         <Header>
@@ -87,6 +115,13 @@ class Anatomy extends Component {
           initialRegion={ region }
           onPress={this.showModal}
           >
+          
+          <MapView.Marker
+            image={marker}
+            coordinate={ currentLocation }
+            title={'Your Location'} />
+          
+
           {markers.map(marker => (
             <MapView.Marker
             key={marker.id}
@@ -94,15 +129,18 @@ class Anatomy extends Component {
             title={marker.title} />
           ))
          }
-
             <View>
               <FormModal isModalVisible={this.state.isModalVisible} addMarker={this.addMarker} updateRemainder={this.updateRemainder}/>
             </View>
-
          </MapView>
 
       </Container>
     );
+  } else {
+    return (
+        <NHSpinner />
+      )
+    }
   }
 }
 
