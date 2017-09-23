@@ -79,6 +79,9 @@ import AdvSegment from "./components/segment/segmentTab";
 import SimpleDeck from "./components/deckswiper/simple";
 import AdvancedDeck from "./components/deckswiper/advanced";
 
+import { Provider } from 'react-redux';
+import store from './store'
+
 const AppNavigator = StackNavigator(
     {
         Drawer: { screen: Drawer },
@@ -175,5 +178,7 @@ const AppNavigator = StackNavigator(
 
 export default () =>
     <Root>
-        <AppNavigator />
+        <Provider store={store}>
+            <AppNavigator />
+        </Provider>
     </Root>;

@@ -18,6 +18,8 @@ import {
 import FormModal from './modal'
 import styles from "./styles";
 import NHSpinner from '../spinner'
+import { setCurrentThunk, getMarkersThunk, addMarkerThunk } from '../../store'
+import { connect } from "react-redux";
 
 const marker = require("../../../img/blueDot.png")
 
@@ -45,11 +47,11 @@ class Anatomy extends Component {
     })
   }
 
-  addMarker(event) {
+  addMarker() {
     this.setState({isModalVisible: !this.state.isModalVisible} )
     event = this.state.currentLonLat
     const newMarker = {
-      id: this.state.markers.length,
+      id: this.props.markers.length+1,
       title: this.state.remainder,
       coordinates: {
         latitude: event.latitude,
@@ -57,10 +59,10 @@ class Anatomy extends Component {
       }
     }
     this.setState({
-      markers: [...this.state.markers, newMarker],
       currentLonLat: [],
       remainder: ''
     })
+    this.props.setMarker(newMarker)
   }
 
   updateRemainder(update) {
@@ -68,15 +70,13 @@ class Anatomy extends Component {
   }
 
   componentDidMount() {
+    this.props.getMarkers
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
-        this.setState({
-          currentLocation: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          },
-          error: null,
-        });
+        this.props.setCurrentLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        })
       },
       (error) => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 1000, distanceFilter: 0 },
@@ -88,10 +88,9 @@ class Anatomy extends Component {
   }
 
   render() {
-    console.log('current state ', this.state)
-    const markers = this.state.markers
+    const markers = this.props.markers
     const isModalVisible = this.state.isModalVisible
-    const currentLocation = this.state.currentLocation
+    const currentLocation = this.props.currentLocation || null
     if (currentLocation.latitude) {
     return (
       <Container style={styles.container}>
@@ -121,7 +120,6 @@ class Anatomy extends Component {
             coordinate={ currentLocation }
             title={'Your Location'} />
           
-
           {markers.map(marker => (
             <MapView.Marker
             key={marker.id}
@@ -144,7 +142,31 @@ class Anatomy extends Component {
   }
 }
 
-export default Anatomy;
+const mapState = state => {
+  return {
+    currentLocation: state.currentLocation,
+    markers: state.markers
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    setCurrentLocation: location => {
+      const action = setCurrentThunk(location)
+      dispatch(action)
+    },
+    getMarkers: () => {
+      const action = getMarkersThunk()
+      dispatch(action)
+    },
+    setMarker: marker => {
+      const action = addMarkerThunk(marker)
+      dispatch(action)
+    }
+  }
+}
+
+export default connect(mapState, mapDispatch)(Anatomy)
 
 const region = {
   latitude: 40.704926,

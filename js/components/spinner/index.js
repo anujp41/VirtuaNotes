@@ -22,24 +22,13 @@ class NHSpinner extends Component {
     return (
       <Container style={styles.container}>
         <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("DrawerOpen")}
-            >
-              <Icon name="menu" />
-            </Button>
-          </Left>
           <Body>
-            <Title>Spinner</Title>
+            <Title>...Your map is loading</Title>
           </Body>
-          <Right />
-
         </Header>
 
         <Content>
-          <Spinner />
-          <Spinner color="red" />
+          <Spinner color="blue" />
         </Content>
       </Container>
     );

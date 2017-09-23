@@ -15,7 +15,7 @@ export default class FormModal extends Component {
     _renderButton = (text) => (
         <TouchableOpacity onPress={this.props.addMarker}>
           <View style={styles.button}>
-            <Text>Submit</Text>
+            <Text>{text}</Text>
           </View>
         </TouchableOpacity>
       );
