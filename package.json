@@ -21,6 +21,7 @@
   "dependencies": {
     "color": "1.0.3",
     "expo": "19.0.1",
+    "geolib": "^2.0.23",
     "lodash": "4.13.1",
     "mapbox-gl": "^0.40.1",
     "moment": "2.13.0",

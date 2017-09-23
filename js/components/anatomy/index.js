@@ -18,8 +18,9 @@ import {
 import FormModal from './modal'
 import styles from "./styles";
 import NHSpinner from '../spinner'
-import { setCurrentThunk, getMarkersThunk, addMarkerThunk } from '../../store'
+import { setCurrentThunk, getMarkersThunk, addMarkerThunk, addDistanceThunk } from '../../store'
 import { connect } from "react-redux";
+import geolib from 'geolib'
 
 const marker = require("../../../img/blueDot.png")
 
@@ -31,8 +32,6 @@ class Anatomy extends Component {
     this.showModal = this.showModal.bind(this)
     this.updateRemainder = this.updateRemainder.bind(this)
     this.state = {
-      currentLocation: {},  //move to store
-      markers: [],          //move to store
       isModalVisible: false,
       currentLonLat: [],
       remainder: '',
@@ -63,6 +62,7 @@ class Anatomy extends Component {
       remainder: ''
     })
     this.props.setMarker(newMarker)
+    this.props.addDistance({id: newMarker.id, distance: getDistance(this.props.currentLocation, newMarker.coordinates)})
   }
 
   updateRemainder(update) {
@@ -143,6 +143,7 @@ class Anatomy extends Component {
 }
 
 const mapState = state => {
+  console.log('here is my state ', state)
   return {
     currentLocation: state.currentLocation,
     markers: state.markers
@@ -162,6 +163,10 @@ const mapDispatch = dispatch => {
     setMarker: marker => {
       const action = addMarkerThunk(marker)
       dispatch(action)
+    },
+    addDistance: distance => {
+      const action = addDistanceThunk(distance)
+      dispatch(action)
     }
   }
 }
@@ -173,4 +178,8 @@ const region = {
   longitude: -74.009432,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421
+}
+
+function getDistance(currentPos, marker) {
+  return geolib.getDistance(currentPos, marker)
 }
