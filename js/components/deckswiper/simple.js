@@ -62,7 +62,7 @@ class SimpleDeck extends Component {
 						</Button>
 					</Left>
 					<Body>
-						<Title>Simple Deck Swiper</Title>
+						<Title>Your List</Title>
 					</Body>
 					<Right />
 				</Header>

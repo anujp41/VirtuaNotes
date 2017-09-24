@@ -48,13 +48,16 @@ class Anatomy extends Component {
 
   addMarker() {
     this.setState({isModalVisible: !this.state.isModalVisible} )
-    event = this.state.currentLonLat
+    const latitude = this.state.currentLonLat.latitude
+    const longitude = this.state.currentLonLat.longitude
+    const distance = getDistance(this.props.currentLocation, {latitude, longitude})
     const newMarker = {
       id: this.props.markers.length+1,
       title: this.state.remainder,
+      description: (distance/1609.34).toFixed(2) + ' miles away',
       coordinates: {
-        latitude: event.latitude,
-        longitude: event.longitude
+        latitude,
+        longitude
       }
     }
     this.setState({
@@ -62,7 +65,7 @@ class Anatomy extends Component {
       remainder: ''
     })
     this.props.setMarker(newMarker)
-    this.props.addDistance({id: newMarker.id, distance: getDistance(this.props.currentLocation, newMarker.coordinates)})
+    this.props.addDistance({id: newMarker.id, distance})
   }
 
   updateRemainder(update) {
@@ -111,7 +114,12 @@ class Anatomy extends Component {
 
           <MapView
           style={{ flex: 1 }}
-          initialRegion={ region }
+          initialRegion={{ 
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+           }}
           onPress={this.showModal}
           >
           
@@ -124,7 +132,8 @@ class Anatomy extends Component {
             <MapView.Marker
             key={marker.id}
             coordinate={marker.coordinates}
-            title={marker.title} />
+            title={marker.title}
+            description={marker.description} />
           ))
          }
             <View>
@@ -143,7 +152,6 @@ class Anatomy extends Component {
 }
 
 const mapState = state => {
-  console.log('here is my state ', state)
   return {
     currentLocation: state.currentLocation,
     markers: state.markers
@@ -173,12 +181,12 @@ const mapDispatch = dispatch => {
 
 export default connect(mapState, mapDispatch)(Anatomy)
 
-const region = {
-  latitude: 40.704926,
-  longitude: -74.009432,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421
-}
+// const region = {
+//   latitude: 40.704926,
+//   longitude: -74.009432,
+//   latitudeDelta: 0.0922,
+//   longitudeDelta: 0.0421
+// }
 
 function getDistance(currentPos, marker) {
   return geolib.getDistance(currentPos, marker)
