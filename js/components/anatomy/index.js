@@ -181,13 +181,6 @@ const mapDispatch = dispatch => {
 
 export default connect(mapState, mapDispatch)(Anatomy)
 
-// const region = {
-//   latitude: 40.704926,
-//   longitude: -74.009432,
-//   latitudeDelta: 0.0922,
-//   longitudeDelta: 0.0421
-// }
-
 function getDistance(currentPos, marker) {
   return geolib.getDistance(currentPos, marker)
 }

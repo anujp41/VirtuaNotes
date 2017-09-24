@@ -17,48 +17,41 @@ import {
   Toast
 } from "native-base";
 
+import { connect } from "react-redux";
 import styles from "./styles";
 
 class ToastNB extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showToast: false
-    };
-  }
 
+  constructor(props) {
+    super(props)
+  }
+  
   render() {
+    console.log('here is ', this.props)
     return (
       <Container style={styles.container}>
-        <Header>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("DrawerOpen")}
-            >
-              <Icon name="ios-menu" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Toast</Title>
-          </Body>
-          <Right />
-        </Header>
-
-        <Content padder>
           <Button
-            onPress={() =>
+            onPress={() => {
+              this.props.remove(this.props.marker)
               Toast.show({
-                text: "Wrong password!",
+                text: "Note removed",
                 buttonText: "Okay"
-              })}
+              })}}
           >
-            <Text>Toast</Text>
+            <Text>Remove Note</Text>
           </Button>
-        </Content>
       </Container>
     );
   }
 }
 
 export default ToastNB;
+
+const mapDispatch = dispatch => {
+  return {
+    removeMarker: marker => {
+      const action = removeMarkerThunk(marker)
+      dispatch(action)
+    }
+  }
+}

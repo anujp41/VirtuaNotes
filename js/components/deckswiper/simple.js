@@ -20,7 +20,8 @@ import {
 	Body,
 	Content,
 } from "native-base";
-
+import Toast from "../toast"
+import { removeMarkerThunk } from '../../store'
 import styles from "./styles";
 
 const cardOne = require("../../../img/swiper-1.png");
@@ -57,8 +58,7 @@ class SimpleDeck extends Component {
 	// eslint-disable-line
 
 	render() {
-		const markers = this.props.markers
-		
+		const markers = this.props.markers		
 		if (markers.length) {
 		return (
 			<Container style={styles.container}>
@@ -73,13 +73,12 @@ class SimpleDeck extends Component {
 					</Body>
 					<Right />
 				</Header>
-
 				<View style={{ flex: 1, padding: 12 }}>
 					<DeckSwiper
 						dataSource={markers}
 						looping={true}
 						renderItem={item =>
-							<Card style={{ elevation: 3 }}>
+							<Card style={{ elevation: 3 }}>								
 								<CardItem>
 									<Left>
 										<Thumbnail source={image} />
@@ -89,7 +88,7 @@ class SimpleDeck extends Component {
 											</Text>
 											<Text note>{item.description}</Text>
 										</Body>
-									</Left>
+									</Left>	
 								</CardItem>
 								<CardItem cardBody>
 									<Image
@@ -108,6 +107,7 @@ class SimpleDeck extends Component {
 										{item.title}
 									</Text>
 								</CardItem>
+								<Right><Toast remove={this.props.removeMarker} marker={item}/></Right>
 							</Card>}
 					/>
 				</View>
@@ -143,23 +143,11 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
 	return {
-	  setCurrentLocation: location => {
-		const action = setCurrentThunk(location)
-		dispatch(action)
-	  },
-	  getMarkers: () => {
-		const action = getMarkersThunk()
-		dispatch(action)
-	  },
-	  setMarker: marker => {
-		const action = addMarkerThunk(marker)
-		dispatch(action)
-	  },
-	  addDistance: distance => {
-		const action = addDistanceThunk(distance)
+	  removeMarker: marker => {
+		const action = removeMarkerThunk(marker)
 		dispatch(action)
 	  }
 	}
   }
   
-  export default connect(mapState, mapDispatch)(SimpleDeck)
+export default connect(mapState, mapDispatch)(SimpleDeck)
