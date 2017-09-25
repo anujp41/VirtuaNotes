@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Label, Item, Input } from 'native-base';
 import Modal from 'react-native-modal';
 import styles from "./styles";
@@ -33,6 +33,7 @@ export default class FormModal extends Component {
         const isModalVisible = this.props.isModalVisible
         return (
             <View>
+            <TouchableWithoutFeedback onPress={this.props.showModal}>
             <Modal
                 isVisible={isModalVisible}
                 backdropColor={'#336E7B'}
@@ -44,8 +45,9 @@ export default class FormModal extends Component {
                 backdropTransitionInTiming={1000}
                 backdropTransitionOutTiming={1000}
                 >
-                {this._renderModalContent()}
+                    {this._renderModalContent()}
             </Modal>
+            </TouchableWithoutFeedback>
             </View>
         )
     }

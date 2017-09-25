@@ -19,7 +19,8 @@ import FormModal from './modal'
 import styles from "./styles";
 import NHSpinner from '../spinner'
 import { setCurrentThunk, getMarkersThunk, addMarkerThunk, addDistanceThunk } from '../../store'
-import { connect } from "react-redux";
+import { connect } from "react-redux"
+import { Constants, Permissions, Notifications } from 'expo'
 import geolib from 'geolib'
 
 const marker = require("../../../img/blueDot.png")
@@ -42,7 +43,7 @@ class Anatomy extends Component {
   showModal(event) {
     this.setState({
       isModalVisible: !this.state.isModalVisible,
-      currentLonLat: event.nativeEvent.coordinate
+      currentLonLat: event.nativeEvent.coordinate || []
     })
   }
 
@@ -72,7 +73,7 @@ class Anatomy extends Component {
     this.setState({remainder: update})
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.getMarkers
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
@@ -84,6 +85,12 @@ class Anatomy extends Component {
       (error) => this.setState({ error: error.message }),
       { enableHighAccuracy: true, timeout: 2000, maximumAge: 1000, distanceFilter: 0 },
     );
+
+    let result = await   
+    Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (Constants.lisDevice && resut.status === 'granted') {
+     console.log('Notification permissions granted.')
+    }
   }
 
   componentWillUnmount() {
@@ -94,6 +101,7 @@ class Anatomy extends Component {
     const markers = this.props.markers
     const isModalVisible = this.state.isModalVisible
     const currentLocation = this.props.currentLocation || null
+    Notifications.scheduleLocalNotificationAsync(localNotification)
     if (currentLocation.latitude) {
     return (
       <Container style={styles.container}>
@@ -137,7 +145,7 @@ class Anatomy extends Component {
           ))
          }
             <View>
-              <FormModal isModalVisible={this.state.isModalVisible} addMarker={this.addMarker} updateRemainder={this.updateRemainder}/>
+              <FormModal showModal={this.showModal} isModalVisible={this.state.isModalVisible} addMarker={this.addMarker} updateRemainder={this.updateRemainder}/>
             </View>
          </MapView>
 
@@ -184,3 +192,19 @@ export default connect(mapState, mapDispatch)(Anatomy)
 function getDistance(currentPos, marker) {
   return geolib.getDistance(currentPos, marker)
 }
+
+const localNotification = {
+  title: 'Hello',
+  body: 'Your notification',
+  ios: {
+    sound: true
+  },
+};
+
+let t = new Date();
+t.setSeconds(t.getSeconds() + 1000);
+const schedulingOptions = {
+    time: t
+  };
+
+Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
