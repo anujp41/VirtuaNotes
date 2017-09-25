@@ -20,19 +20,9 @@ import {
 	List,
 	ListItem,
 } from "native-base";
+import styles from './styles'
+import SimpleDeck from './simple'
 
-import styles from "./styles";
-
-const datas = [
-	{
-		route: "SimpleDeck",
-		text: "Simple DeckSwiper",
-	},
-	{
-		route: "AdvancedDeck",
-		text: "Advanced DeckSwiper",
-	},
-];
 class NHDeckSwiper extends Component {
 	// eslint-disable-line
 
@@ -46,25 +36,14 @@ class NHDeckSwiper extends Component {
 						</Button>
 					</Left>
 					<Body>
-						<Title>Deck Swiper</Title>
+						<Title>Your notes</Title>
 					</Body>
 					<Right />
 				</Header>
 
-				<Content>
-					<List
-						dataArray={datas}
-						renderRow={data =>
-							<ListItem button onPress={() => this.props.navigation.navigate(data.route)}>
-								<Text>
-									{data.text}
-								</Text>
-								<Right>
-									<Icon name="arrow-forward" style={{ color: "#999" }} />
-								</Right>
-							</ListItem>}
-					/>
-				</Content>
+				<SimpleDeck />
+
+
 			</Container>
 		);
 	}

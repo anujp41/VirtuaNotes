@@ -29,31 +29,6 @@ const cardTwo = require("../../../img/swiper-2.png");
 const cardThree = require("../../../img/swiper-3.png");
 const cardFour = require("../../../img/swiper-4.png");
 
-const image = require("../../../img/marcello.jpg");
-
-const cards = [
-	{
-		text: "Card One",
-		name: "One",
-		image: cardOne,
-	},
-	{
-		text: "Card Two",
-		name: "Two",
-		image: cardTwo,
-	},
-	{
-		text: "Card Three",
-		name: "Three",
-		image: cardThree,
-	},
-	{
-		text: "Card Four",
-		name: "Four",
-		image: cardFour,
-	},
-];
-
 class SimpleDeck extends Component {
 	// eslint-disable-line
 
@@ -62,17 +37,7 @@ class SimpleDeck extends Component {
 		if (markers.length) {
 		return (
 			<Container style={styles.container}>
-				<Header>
-					<Left>
-						<Button transparent onPress={() => this.props.navigation.goBack()}>
-							<Icon name="arrow-back" />
-						</Button>
-					</Left>
-					<Body>
-						<Title>Your List</Title>
-					</Body>
-					<Right />
-				</Header>
+				
 				<View style={{ flex: 1, padding: 12 }}>
 					<DeckSwiper
 						dataSource={markers}
@@ -81,7 +46,7 @@ class SimpleDeck extends Component {
 							<Card style={{ elevation: 3 }}>								
 								<CardItem>
 									<Left>
-										<Thumbnail source={image} />
+										<Thumbnail source={{uri: item.image}} />
 										<Body>
 											<Text>
 												{item.title}
@@ -98,7 +63,7 @@ class SimpleDeck extends Component {
 											flex: 1,
 											height: 300,
 										}}
-										source={image}
+										source={{uri: item.image}}
 									/>
 								</CardItem>
 								<CardItem>
@@ -116,17 +81,6 @@ class SimpleDeck extends Component {
 		} else {
 			return (
 				<Container style={styles.container}>
-					<Header>
-					<Left>
-						<Button transparent onPress={() => this.props.navigation.goBack()}>
-							<Icon name="arrow-back" />
-						</Button>
-					</Left>
-					<Body>
-						<Title>Your List</Title>
-					</Body>
-					<Right />
-				</Header>
 
 					<View><Text>You do not have any remainders yet</Text></View>
 				</Container>
