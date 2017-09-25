@@ -24,6 +24,7 @@ import { Constants, Permissions, Notifications } from 'expo'
 import geolib from 'geolib'
 
 const marker = require("../../../img/blueDot.png")
+const scroll = require("../../../img/scroll.png")
 
 class Anatomy extends Component {
 
@@ -61,6 +62,7 @@ class Anatomy extends Component {
         longitude
       }
     }
+    // distance <= 500 ? pushNotification(newMarker, distance) : console.log('')
     this.setState({
       currentLonLat: [],
       remainder: ''
@@ -101,7 +103,6 @@ class Anatomy extends Component {
     const markers = this.props.markers
     const isModalVisible = this.state.isModalVisible
     const currentLocation = this.props.currentLocation || null
-    Notifications.scheduleLocalNotificationAsync(localNotification)
     if (currentLocation.latitude) {
     return (
       <Container style={styles.container}>
@@ -141,7 +142,8 @@ class Anatomy extends Component {
             key={marker.id}
             coordinate={marker.coordinates}
             title={marker.title}
-            description={marker.description} />
+            description={marker.description}
+            image={scroll} />
           ))
          }
             <View>
@@ -160,6 +162,7 @@ class Anatomy extends Component {
 }
 
 const mapState = state => {
+  console.log('this is the state ', state)
   return {
     currentLocation: state.currentLocation,
     markers: state.markers
@@ -193,18 +196,39 @@ function getDistance(currentPos, marker) {
   return geolib.getDistance(currentPos, marker)
 }
 
-const localNotification = {
-  title: 'Hello',
-  body: 'Your notification',
-  ios: {
-    sound: true
-  },
-};
+// function pushNotification (marker, distance) {
+//   // console.log('you are here ', marker, distance)
+//   // const localNotification = { 
+//   //   title: 'You are close...',
+//   //   body: marker.title + ' is ' + distance + ' meters away',
+//   //   ios: {
+//   //     sound: true
+//   //   }
+//   // }
+//   console.log('about to do this now')
+//   return Notifications.presentLocalNotificationAsync({ 
+//     title: 'You are close...',
+//     body: marker.title + ' is ' + distance + ' meters away',
+//     ios: {
+//       sound: true
+//     }
+//   })
+// }
 
-let t = new Date();
-t.setSeconds(t.getSeconds() + 1000);
-const schedulingOptions = {
-    time: t
-  };
 
-Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
+// const localNotification = {
+//   title: 'Hello',
+//   body: 'Your notification',
+//   ios: {
+//     sound: true
+//   },
+// };
+
+// let t = new Date();
+// t.setSeconds(t.getSeconds() + 10);
+// const schedulingOptions = {
+//     time: t,
+//     repeat: 'minute'
+//   };
+
+// Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions);
